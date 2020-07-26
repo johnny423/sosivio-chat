@@ -13,7 +13,7 @@ import (
 func NewPoolingHandler(validator auth.Validator, handler MessagesRetriever, logger log.FieldLogger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger.Info("received new pooling request")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		cookie, err := r.Cookie(config.TokenName)

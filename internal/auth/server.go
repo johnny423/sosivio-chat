@@ -14,9 +14,13 @@ func NewSignInHandler(service Signer, logger log.FieldLogger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger.Info("received requests")
 
+		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+
 		var credentials Credentials
 		err := json.NewDecoder(r.Body).Decode(&credentials)
 		if err != nil {
+			logger.Warn("bad request with error ", err)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
